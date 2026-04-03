@@ -15,8 +15,10 @@ const useFinanceStore = create(
         sortOrder: 'desc'
       },
       darkMode: false,
+      userRole: 'Admin',
 
       setActiveTab: (tab) => set({ activeTab: tab }),
+      setUserRole: (role) => set({ userRole: role }),
 
       addTransaction: (transaction) => set((state) => ({
         transactions: [

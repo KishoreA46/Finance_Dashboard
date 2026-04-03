@@ -10,8 +10,10 @@ import Filters from './components/transactions/Filters';
 import InsightCards from './components/insights/InsightCards';
 import ComparisonChart from './components/insights/ComparisonChart';
 import { Plus } from 'lucide-react';
+import useFinanceStore from './store/useFinanceStore';
 
 const Dashboard = ({ onAdd, onEdit }) => {
+  const { userRole } = useFinanceStore();
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
@@ -19,13 +21,15 @@ const Dashboard = ({ onAdd, onEdit }) => {
           <h2 className="text-2xl font-bold tracking-tight text-foreground">Overview</h2>
           <p className="text-sm text-muted-foreground">Detailed overview of your financial status.</p>
         </div>
-        <button 
-          onClick={onAdd}
-          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-lg active:scale-95"
-        >
-          <Plus className="h-4 w-4" />
-          Add Transaction
-        </button>
+        {userRole === 'Admin' && (
+          <button 
+            onClick={onAdd}
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-lg active:scale-95"
+          >
+            <Plus className="h-4 w-4" />
+            Add Transaction
+          </button>
+        )}
       </div>
       <SummaryCards />
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3 hover:cursor-default">
@@ -41,6 +45,7 @@ const Dashboard = ({ onAdd, onEdit }) => {
 };
 
 const Transactions = ({ onAdd, onEdit }) => {
+  const { userRole } = useFinanceStore();
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
@@ -48,13 +53,15 @@ const Transactions = ({ onAdd, onEdit }) => {
           <h2 className="text-2xl font-bold tracking-tight text-foreground">Transactions</h2>
           <p className="text-sm text-muted-foreground">Manage and track your income and expenses.</p>
         </div>
-        <button 
-          onClick={onAdd}
-          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-lg active:scale-95"
-        >
-          <Plus className="h-4 w-4" />
-          Add Transaction
-        </button>
+        {userRole === 'Admin' && (
+          <button 
+            onClick={onAdd}
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-lg active:scale-95"
+          >
+            <Plus className="h-4 w-4" />
+            Add Transaction
+          </button>
+        )}
       </div>
       <Filters />
       <TransactionTable onEdit={onEdit} />

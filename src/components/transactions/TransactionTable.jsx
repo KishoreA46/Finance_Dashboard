@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 const ITEMS_PER_PAGE = 10;
 
 const TransactionTable = ({ onEdit }) => {
-  const { transactions, filters, deleteTransaction } = useFinanceStore();
+  const { transactions, filters, deleteTransaction, userRole } = useFinanceStore();
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredTransactions = useMemo(() => {
@@ -135,7 +135,7 @@ const TransactionTable = ({ onEdit }) => {
                   <th className="px-6 py-4">Category</th>
                   <th className="px-6 py-4">Type</th>
                   <th className="px-6 py-4 text-right">Amount</th>
-                  <th className="px-6 py-4 text-center">Actions</th>
+                  {userRole === 'Admin' && <th className="px-6 py-4 text-center">Actions</th>}
                 </tr>
               </thead>
               <tbody className="divide-y text-sm">
@@ -164,28 +164,30 @@ const TransactionTable = ({ onEdit }) => {
                     )}>
                       {t.type === 'income' ? '+' : '-'}{formatCurrency(t.amount)}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
-                        <button 
-                          onClick={() => onEdit(t)}
-                          className="p-2 rounded-lg hover:bg-primary/10 text-primary transition-colors active:scale-90"
-                          title="Edit"
-                        >
-                          <Edit2 className="h-4 w-4" />
-                        </button>
-                        <button 
-                          onClick={() => {
-                            if (window.confirm('Are you sure you want to delete this transaction?')) {
-                              deleteTransaction(t.id);
-                            }
-                          }}
-                          className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-500 transition-colors active:scale-90"
-                          title="Delete"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
+                    {userRole === 'Admin' && (
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                          <button 
+                            onClick={() => onEdit(t)}
+                            className="p-2 rounded-lg hover:bg-primary/10 text-primary transition-colors active:scale-90"
+                            title="Edit"
+                          >
+                            <Edit2 className="h-4 w-4" />
+                          </button>
+                          <button 
+                            onClick={() => {
+                              if (window.confirm('Are you sure you want to delete this transaction?')) {
+                                deleteTransaction(t.id);
+                              }
+                            }}
+                            className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-500 transition-colors active:scale-90"
+                            title="Delete"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
